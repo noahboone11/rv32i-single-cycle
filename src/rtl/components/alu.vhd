@@ -13,41 +13,53 @@ entity alu is
 end entity alu;
 
 architecture rtl of alu is
+    constant ADD_CTRL  : std_logic_vector(3 downto 0) := "0000";
+    constant SUB_CTRL  : std_logic_vector(3 downto 0) := "0001";
+    constant AND_CTRL  : std_logic_vector(3 downto 0) := "0010";
+    constant OR_CTRL   : std_logic_vector(3 downto 0) := "0011";
+    constant SLT_CTRL  : std_logic_vector(3 downto 0) := "0100";
+    constant SLTU_CTRL : std_logic_vector(3 downto 0) := "0101";
+    constant XOR_CTRL  : std_logic_vector(3 downto 0) := "0110";
+    constant LUI_CTRL  : std_logic_vector(3 downto 0) := "0111";
+    constant SLL_CTRL  : std_logic_vector(3 downto 0) := "1000";
+    constant SRA_CTRL  : std_logic_vector(3 downto 0) := "1001";
+    constant SRL_CTRL  : std_logic_vector(3 downto 0) := "1010";
+    constant AUIPC_CTRL: std_logic_vector(3 downto 0) := "1011";
 begin
     process(all)
     begin
         case alu_control is
-            when "0000" =>  -- ADD
+            when ADD_CTRL =>
                 alu_result <= std_logic_vector(signed(src1) + signed(src2));
-            when "0001" =>  -- SUB
+            when SUB_CTRL =>
                 alu_result <= std_logic_vector(signed(src1) - signed(src2));
-            when "0010" =>  -- AND
+            when AND_CTRL =>
                 alu_result <= src1 and src2;
-            when "0011" =>  -- OR
+            when OR_CTRL =>
                 alu_result <= src1 or src2;
-            when "0100" =>  -- SLT
+            when SLT_CTRL =>
                 if signed(src1) < signed(src2) then
                     alu_result <= (31 downto 1 => '0') & '1';
                 else
                     alu_result <= (others => '0');
                 end if;
-            when "0101" =>  -- SLTU
+            when SLTU_CTRL =>
                 if unsigned(src1) < unsigned(src2) then
                     alu_result <= (31 downto 1 => '0') & '1';
                 else
                     alu_result <= (others => '0');
                 end if;
-            when "0110" =>  -- XOR
+            when XOR_CTRL =>
                 alu_result <= src1 xor src2;
-            when "0111" =>  -- LUI
+            when LUI_CTRL =>
                 alu_result <= src2;
-            when "1000" =>  -- SLL
+            when SLL_CTRL =>
                 alu_result <= std_logic_vector(shift_left(unsigned(src1), to_integer(unsigned(src2(4 downto 0)))));
-            when "1001" =>  -- SRA
+            when SRA_CTRL =>
                 alu_result <= std_logic_vector(shift_right(signed(src1), to_integer(unsigned(src2(4 downto 0)))));
-            when "1010" =>  -- SRL
+            when SRL_CTRL =>
                 alu_result <= std_logic_vector(shift_right(unsigned(src1), to_integer(unsigned(src2(4 downto 0)))));
-            when "1011" =>  -- AUIPC
+            when AUIPC_CTRL =>
                 alu_result <= std_logic_vector(unsigned(src1) + unsigned(src2));
             when others =>
                 alu_result <= (others => '0');
