@@ -1,19 +1,13 @@
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+use IEEE.NUMERIC_STD.all;
 
 entity adder is
-    generic (
-        WIDTH : natural := 32
-    );
-    port (
-        a : in  std_logic_vector(WIDTH-1 downto 0);
-        b : in  std_logic_vector(WIDTH-1 downto 0);
-        f : out std_logic_vector(WIDTH-1 downto 0)
-    );
-end adder;
+    port(a, b : in  STD_LOGIC_VECTOR(31 downto 0);
+         y    : out STD_LOGIC_VECTOR(31 downto 0));
+end;
 
-architecture rtl of adder is
+architecture behave of adder is
 begin
-    f <= std_logic_vector(unsigned(a) + unsigned(b));
-end rtl;
+    y <= std_logic_vector(unsigned(a) + unsigned(b));
+end;
